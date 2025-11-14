@@ -14,7 +14,7 @@ const CartSlice = createSlice({
     removeItem: (state, action) => {
       state.value>0 ? state.value -=1 : null;
     },
-    clearCart: (state) => {
+    clearCart: (state, action) => {
       state.value = 0;
     },
   },

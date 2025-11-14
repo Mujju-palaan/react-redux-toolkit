@@ -1,35 +1,41 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-interface CartItem {
-  id: string | number;
-  name: string;
-  quantity: number;
-}
+// 🔹 Async thunk for fetching products
+export const fetchProducts = createAsyncThunk("products/fetchAll", async () => {
+  const resp = await fetch("https://dummyjson.com/products");
+  if (!resp.ok) {
+    throw new Error("Failed to fetch products");
+  }
+  const data = await resp.json();
+  return data.products;
+});
 
-interface CartState {
-  items: CartItem[];
-}
-
-const initialState: CartState = {
+// 🔹 Initial state
+const initialState = {
   items: [],
-}
+  status: "idle", // "idle" | "loading" | "succeeded" | "failed"
+  error: null as string | null,
+};
 
-const ProductSlice = createSlice({
-  name: "cart",
+// 🔹 Slice definition
+const productsSlice = createSlice({
+  name: "products",
   initialState,
-  reducers: {
-    addItem: (state, action: PayloadAction<CartItem>) => {
-      state.items.push(action.payload);
-    },
-    removeItem: (state, action: PayloadAction<string | number>) => {
-      state.items = state.items.filter(item => item.id !== action.payload);
-    },
-    clearCart: (state) => {
-      state.items = [];
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      });
   },
 });
 
-// ✅ Correct export
-export const { addItem, removeItem, clearCart } = ProductSlice.actions;
-export default ProductSlice.reducer;
+export default productsSlice.reducer;

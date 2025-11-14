@@ -6,7 +6,7 @@ const Item = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <button className="remove-button" onClick={() => dispatch(clearCart())}>Clear All</button>
+      <button className="remove-button" onClick={() => dispatch(clearCart([]))}>Clear All</button>
 
       <div className="pt-4 pb-8 px-4 justify-center	 items-center flex">
         <div className="product-card">
