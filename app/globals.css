@@ -161,6 +161,10 @@
     .btn:hover {
       background: #1d3557;
     }
+    
+    .btn-undo{
+      color: #6c757d;
+    }
 
     .remove-button{
       background-color: #e63946;

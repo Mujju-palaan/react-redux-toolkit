@@ -1,4 +1,5 @@
-'use client'
+"use client";
+import { AddTask } from "@/app/redux-toolkit/TaskSlice";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -8,7 +9,9 @@ const ItemForm = () => {
   const handelSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Add your form submission logic here
-    console.log("Submitted text:", text);
+    dispatch(AddTask(text));
+    // console.log("Dispatching AddTask with text:", dispatch(AddTask(text)));
+    // console.log("Submitted text:", text);
     setText("");
   };
   return (
@@ -21,7 +24,9 @@ const ItemForm = () => {
           type="text"
           placeholder="Add a Task"
         />
-        <button className="btn" type="submit">Add Item</button>
+        <button className="btn" type="submit">
+          Add Item
+        </button>
       </form>
     </div>
   );
